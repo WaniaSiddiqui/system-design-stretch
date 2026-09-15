@@ -73,11 +73,20 @@ function renderCards(list) {
   }
 }
 
-fetch("artists.json")
+/*fetch("artists.json")
   .then((response) => response.json())
   .then((artists) => {
     renderCards(artists);
-  });
+  });*/
+
+  fetch("artists.json")
+    .then((response) => response.json())
+    .then((artists) => {
+      setTimeout(() => {
+        renderCards(artists);
+        loading.textContent = "";
+      }, 2000);
+    });
 
 // Shuffle: pick a random artist and feature them.
 const shuffleButton = document.querySelector(".shuffle");
@@ -105,3 +114,4 @@ form.addEventListener("submit", (event) => {
     genreInput.value = "";
   }
 });
+const loading = document.querySelector(".loading");
