@@ -16,12 +16,16 @@ setTimeout(() => console.log("intermission"), 500);
 console.log("lights down");
 
 // Your prediction:
-// 1. doors open
-// 2. main act
-// 3. lights down
-// 4. soundcheck
-// 5. intermission
-// 6. encore
+// 1. doors open - RIGHT
+// 2. main act - RIGHT
+// 3. lights down - RIGHT
+// 4. soundcheck - RIGHT
+// 5. intermission - RIGHT
+// 6. encore - RIGHT
+
+// The blocking loop occupied the JavaScript call stack/main thread.
+// While it was running, the browser could not process other JavaScript
+// tasks or update the page normally.
 
 // ===== Provided program (task step 4): trace the call stack =====
 // Trace this as a written call stack diagram in comments, listing every push
@@ -29,40 +33,40 @@ console.log("lights down");
 // confirm the stack trace in the console matches your diagram, innermost
 // first. Keep it commented out while you work on step 2.
 
-/*console.log(prepare(...))
-        ↓
-prepare()
-        ↓
-format()
-        ↓
-artist.name.toUpperCase()*/
-
-//Push console.log(prepare(...)) onto the stack
-//Push prepare() onto the stack
-//Push format() onto the stack
-//Push artist.name.toUpperCase() onto the stack
-
-//Pop artist.name.toUpperCase() off the stack
-//Pop format() off the stack
-//Pop prepare() off the stack
-//Pop console.log(prepare(...)) off the stack
-
 function prepare(artist) {
   return "Now playing " + format(artist);
 }
 function format(artist) {
-  return artist.name.toupperCase();
+  return artist.name.toUpperCase();
 }
 console.log(prepare({ name: "Asake" }));
 
-/* TypeError: artist.name.toupperCase is not a function
-    at format (C:\Users\home\Desktop\System design\system-design-stretch\lesson-02.js:55:23)
-    at prepare (C:\Users\home\Desktop\System design\system-design-stretch\lesson-02.js:52:28)
-    at Object.<anonymous> (C:\Users\home\Desktop\System design\system-design-stretch\lesson-02.js:57:14)
-    at Module._compile (node:internal/modules/cjs/loader:1871:14)
-    at Object..js (node:internal/modules/cjs/loader:2002:10)
-    at Module.load (node:internal/modules/cjs/loader:1594:32)
-    at Module._load (node:internal/modules/cjs/loader:1396:12)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
-    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
-    at node:internal/main/run_main_module:33:47*/
+// Call stack:
+//
+// 1. push console.log()
+// 2. push prepare()
+// 3. push format()
+// 4. push toUpperCase()
+// 5. pop toUpperCase()
+// 6. pop format()
+// 7. pop prepare()
+// 8. pop console.log()
+
+let count = 10;
+
+const countdown = setInterval(() => {
+  console.log(count);
+
+  if (count === 0) {
+    clearInterval(countdown);
+    console.log("Countdown stopped");
+  }
+
+  count--;
+}, 1000);
+
+// JavaScript can handle many waiting tasks because the call stack only
+// handles one piece of JavaScript at a time. Browser facilities such as
+// timers handle waiting work, callbacks wait in task queues, and Promise
+// reactions use the microtask queue. The event loop moves ready work to
+// the call stack when it is free.
