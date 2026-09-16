@@ -73,12 +73,32 @@ function renderCards(list) {
   }
 }
 
-fetch("artists.json")
-  .then((response) => response.json())
-  .then((artists) => {
-    renderCards(artists);
-  });
+async function loadArtists() {
+  try {
+    const response = await fetch("artists.json");
 
+    if (!response.ok) {
+      throw new Error("Could not load artist data.");
+    }
+
+    const artists = await response.json();
+
+    setTimeout(() => {
+      renderCards(artists);
+    }, 2000);
+  } catch (error) {
+    loading.textContent =
+      "Sorry, we could not load the artists. Please try again.";
+
+    console.error(error);
+  } finally {
+    setTimeout(() => {
+      loading.textContent = "";
+    }, 2000);
+  }
+}
+
+loadArtists();
 // Shuffle: pick a random artist and feature them.
 const shuffleButton = document.querySelector(".shuffle");
 
