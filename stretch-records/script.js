@@ -73,9 +73,20 @@ function renderCards(list) {
   }
 }
 
-async function loadArtists() {
-  try {
-    const response = await fetch("artists.json");
+/*fetch("artists.json")
+  .then((response) => response.json())
+  .then((artists) => {
+    renderCards(artists);
+  });*/
+
+  fetch("artists.json")
+    .then((response) => response.json())
+    .then((artists) => {
+      setTimeout(() => {
+        renderCards(artists);
+        loading.textContent = "";
+      }, 2000);
+    });
 
     if (!response.ok) {
       throw new Error("Could not load artist data.");
@@ -125,3 +136,4 @@ form.addEventListener("submit", (event) => {
     genreInput.value = "";
   }
 });
+const loading = document.querySelector(".loading");
